@@ -1,5 +1,7 @@
 #include "file.h"
 
+#include <string.h>
+
 const char* default_output_name = "README.md";
 
 int main(int argc, char* argv[]) {
@@ -64,8 +66,10 @@ int main(int argc, char* argv[]) {
 
 	/* Rename output file to be what the user wanted */
 
-		remove(chosen_output_name);
-		rename(default_output_name, chosen_output_name);
+		if (strcmp(chosen_output_name, default_output_name) != 0) {
+			remove(chosen_output_name);
+			rename(default_output_name, chosen_output_name);
+		}
 
 	return 0;
 }
