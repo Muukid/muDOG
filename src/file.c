@@ -40,7 +40,7 @@
 
 	/* Command identification */
 
-		#define COMMAND_COUNT 8
+		#define COMMAND_COUNT 9
 		const char* commandTypes[COMMAND_COUNT] = {
 			#define DOCBEGIN 0
 			"DOCBEGIN",
@@ -58,6 +58,8 @@
 			"IGNORE",
 			#define ATTENTION 7
 			"ATTENTION",
+			#define NEWLINE 8
+			"NEWLINE",
 		};
 
 		int any_valid(int* valid, int len) {
@@ -170,6 +172,7 @@
 					file_write_char(output, '\n');
 
 					long index = file_get_index(input);
+					file_set_index(input, index-1);
 					char c = file_next_char(input);
 
 					while (c != '\n') {
@@ -230,6 +233,12 @@
 
 				case ATTENTION: {
 					pi->attention_count += 1;
+				} break;
+
+				case NEWLINE: {
+					if (pi->attention_count < pi->ignore_count) return;
+					file_write_char(output, '\n');
+					file_write_char(output, '\n');
 				} break;
 			}
 		}
